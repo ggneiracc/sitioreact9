@@ -1,11 +1,12 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyBlhIeQBjYBtVcNPaBQBmpauEKfS28b7Ok',
-    authDomain: 'fb-bdreact.firebaseapp.com',
-    projectId: 'fb-bdreact',
-    storageBucket: "fb-bdreact.appspot.com",
+    apiKey: 'AIzaSyBoCC1Xj9XCAMZWeanV1Lte8YwdISdmYbo',
+    authDomain: 'fb-bdreact2-98222.firebaseapp.com',
+    projectId: 'fb-bdreact2-98222',
+    storageBucket: "fb-bdreact2-98222.appspot.com",
 };
 
 const app = initializeApp(firebaseConfig);
