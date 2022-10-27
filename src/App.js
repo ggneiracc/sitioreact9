@@ -1,52 +1,53 @@
-//import logo from './logo.svg';
-//import './App.css';
-import { borrarRegistro, GuardarRegistroPersona, reportePersonas, updatePerson } from './componente/api';
+//import firebase, { db } from './firebase';
+//import { collection, getDocs, query, doc, getDoc, addDoc, deleteDoc, updateDoc, setDoc, where } from "firebase/firestore";
 
+
+import { fnCrear, fnRead, fnUpdate, fnDelete } from './componente/api';
 import { useEffect, useState } from "react";
 import { async } from '@firebase/util';
 
 function App() {
-  const [nombrePersona, setNombrePersona] = useState(null);
-  const [idPersona, setIdPersona] = useState(null);
-  const [persona, setPersona] = useState(null);
+  const [nombre, setNombre] = useState(null);
+  const [codigo, setCodigo] = useState(null);
+  const [registro, setRegistro] = useState(null);
 
-  const GuardarPersona = async () => {
-    await GuardarRegistroPersona(nombrePersona);
-    listaPersonas();
+  const appCrear = async () => {
+    await fnCrear(nombre);
+    appRead();
     //console.log(nombrePersona);
   }
 
-  const  removeRegistro = async () => {
-    await borrarRegistro(idPersona);
-    listaPersonas();
-  }
-
-  useEffect( () => {
-    listaPersonas();
-  }, [])
-
-  const listaPersonas = async () => {
-    const p = await reportePersonas();
-    setPersona(p.docs);
+  const appRead = async () => {
+    const p = await fnRead();
+    setRegistro(p.docs);
     //console.log(p.docs[0].data());  
   }
 
-  const updatePersonData = async () =>{
-    await updatePerson(idPersona, nombrePersona);
-    listaPersonas();
+  useEffect( () => {
+    appRead();
+  }, [])
+
+  const appUpdate = async () =>{
+    await fnUpdate(codigo, nombre);
+    appRead();
+  }
+
+  const  appDelete = async () => {
+    await fnDelete(codigo);
+    appRead();
   }
  
   return (
     <div className="App">
-      <input type="text" onChange={ e => setNombrePersona(e.target.value)} placeholder="Nombres completos" /> 
-      <input type="text" onChange={ e => setIdPersona(e.target.value)} placeholder="Código de persona" /> 
+      <input type="text" onChange={ e => setNombre(e.target.value)} placeholder="Nombres completos" /> 
+      <input type="text" onChange={ e => setCodigo(e.target.value)} placeholder="Código de persona" /> 
 
-      <button onClick={GuardarPersona}>Guardar</button>
-      <button onClick={removeRegistro}>Eliminar</button>
-      <button onClick={updatePersonData}>Update</button>
+      <button onClick={appCrear} >Guardar</button>
+      <button onClick={appDelete}>Eliminar</button>
+      <button onClick={appUpdate}>Actualizar</button>
 
       {
-        persona && persona.map( p => <p>{p.id} - { p.data().name }</p>) 
+        registro && registro.map( p => <p>{p.id} - { p.data().name }</p>) 
       }
     </div>
   );
