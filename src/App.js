@@ -1,20 +1,14 @@
-//import firebase, { db } from './firebase';
-//import { collection, getDocs, query, doc, getDoc, addDoc, deleteDoc, updateDoc, setDoc, where } from "firebase/firestore";
-
-
 import { fnCrear, fnRead, fnUpdate, fnDelete } from './componente/api';
 import { useEffect, useState } from "react";
-import { async } from '@firebase/util';
 
 function App() {
   const [nombre, setNombre] = useState(null);
   const [codigo, setCodigo] = useState(null);
   const [registro, setRegistro] = useState(null);
-
-  const appCrear = async () => {
-    await fnCrear(nombre);
+  
+  const appCrear = () => {
+    fnCrear(nombre);
     appRead();
-    //console.log(nombrePersona);
   }
 
   const appRead = async () => {
@@ -24,10 +18,11 @@ function App() {
   }
 
   useEffect( () => {
-    appRead();
+    appRead(); 
   }, [])
 
   const appUpdate = async () =>{
+    //console.log(codigo, nombre);
     await fnUpdate(codigo, nombre);
     appRead();
   }
@@ -36,18 +31,20 @@ function App() {
     await fnDelete(codigo);
     appRead();
   }
- 
+
   return (
     <div className="App">
-      <input type="text" onChange={ e => setNombre(e.target.value)} placeholder="Nombres completos" /> 
-      <input type="text" onChange={ e => setCodigo(e.target.value)} placeholder="Código de persona" /> 
+      <input type="text" onChange={ e => setNombre(e.target.value)} 
+        placeholder="Nombres completos" /> 
+      <input type="text" onChange={ e => setCodigo(e.target.value)} 
+        placeholder="Código de persona" /> 
 
       <button onClick={appCrear} >Guardar</button>
       <button onClick={appDelete}>Eliminar</button>
       <button onClick={appUpdate}>Actualizar</button>
 
       {
-        registro && registro.map( p => <p>{p.id} - { p.data().name }</p>) 
+        registro && registro.map( p => <p key={p.id}>{p.id} - { p.data().name }</p>) 
       }
     </div>
   );
