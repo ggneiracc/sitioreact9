@@ -19,7 +19,7 @@ function App() {
 
   useEffect( () => {
     appRead(); 
-  }, [])
+  }, [registro])
 
   const appUpdate = async () =>{
     //console.log(codigo, nombre);
