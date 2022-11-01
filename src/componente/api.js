@@ -1,5 +1,6 @@
 import firebase, { db } from './firebase';
-import { collection, getDocs, query, doc, getDoc, addDoc, deleteDoc, updateDoc, setDoc, where } from "firebase/firestore";
+import { collection, getDocs, query, doc,  addDoc, deleteDoc, updateDoc } from "firebase/firestore";
+//import { getDoc, setDoc, where } from "firebase/firestore";
 
 //CREAR     //Guardar
 export const fnCrear = (name) => { 
