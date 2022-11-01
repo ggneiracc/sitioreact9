@@ -1,50 +1,60 @@
-import { fnCrear, fnRead, fnUpdate, fnDelete } from './componente/api';
-import { useEffect, useState } from "react";
+import { collection, getDocs, query, doc, deleteDoc, where, } from "firebase/firestore";
+//import { getDoc, addDoc, updateDoc, setDoc, increment } from "firebase/firestore";
+import React, { useEffect, useState } from 'react';
+import firebase, { db } from './componente/firebase';
+import AppForm from './componente/AppForm';
 
-function App() {
-  const [nombre, setNombre] = useState(null);
-  const [codigo, setCodigo] = useState(null);
-  const [registro, setRegistro] = useState(null);
+function App() {  
+  ////////////////////////////////////////////////////////////////////////
+  ////////// READ - fnRead - LECTURA BD //////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
+  const [idActual, setIdActual] = useState("");     //Para CREAR y UPDATE
+  const [docsBD, setDocsBD] = useState([]);         //Para lectura a BD
+  const [orden, setOrden] = useState(0);            //Para numero - falla
+  const i = 1;                                      //Para numero - falla
+
+  const fnRead = async () => {
+    //const tblPersona = query(collection(db, "persona"));   //Sin filtro
+    const tblPersona = query(collection(db, "persona"), where("nombre", "!=", ""));
+    const xDatosBD = await getDocs(tblPersona);
+    const xDoc = [];
+    xDatosBD.forEach((doc) => {
+      //console.log(doc.id, " => ", doc.data());
+      xDoc.push({id: doc.id, ...doc.data()});
+    });
+    setDocsBD(xDoc);
+    //console.log(docsBD);
+  } 
   
-  const appCrear = () => {
-    fnCrear(nombre);
-    appRead();
-  }
-
-  const appRead = async () => {
-    const p = await fnRead();
-    setRegistro(p.docs);
-    //console.log(p.docs[0].data());  
-  }
-
   useEffect( () => {
-    appRead(); 
-  }, [registro])
+    fnRead(); 
+  }, [idActual])
 
-  const appUpdate = async () =>{
-    //console.log(codigo, nombre);
-    await fnUpdate(codigo, nombre);
-    appRead();
-  }
-
-  const  appDelete = async () => {
-    await fnDelete(codigo);
-    appRead();
+  ////////////////////////////////////////////////////////////////////////
+  ////////// DELETE fnDelete - ELIMINAR //////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////
+  const fnDelete = async (xId) => {
+    //console.log(xId);
+    if(window.confirm("Confirme para eliminar")){
+      await deleteDoc(doc(db, 'persona', xId));
+      console.log("Se elimino... "+xId);
+    }
+    fnRead();
   }
 
   return (
-    <div className="App">
-      <input type="text" onChange={ e => setNombre(e.target.value)} 
-        placeholder="Nombres completos" /> 
-      <input type="text" onChange={ e => setCodigo(e.target.value)} 
-        placeholder="Código de persona" /> 
-
-      <button onClick={appCrear} >Guardar</button>
-      <button onClick={appDelete}>Eliminar</button>
-      <button onClick={appUpdate}>Actualizar</button>
-
+    <div style={{width:"350px", background:"greenyellow", padding:"10px"}}>
+      <h1>App copia 2</h1>
+      <AppForm {...{idActual, setIdActual, fnRead}} />
       {
-        registro && registro.map( p => <p key={p.id}>{p.id} - { p.data().name }</p>) 
+        docsBD.map( (p) => 
+          <p key={p.id}>
+            N.{i} - {p.nombre} --- 
+            <span onClick={() => fnDelete(p.id)}>x</span> 
+            -- 
+            <span onClick={() => setIdActual(p.id)}>A</span> 
+          </p>
+        ) 
       }
     </div>
   );

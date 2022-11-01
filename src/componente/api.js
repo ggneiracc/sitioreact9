@@ -1,5 +1,5 @@
-import firebase, { db } from './firebase';
 import { collection, getDocs, query, doc, getDoc, addDoc, deleteDoc, updateDoc, setDoc, where } from "firebase/firestore";
+import firebase, { db } from './firebase';
 
 //CREAR     //Guardar
 export const fnCrear = (name) => { 
@@ -20,9 +20,10 @@ export const fnUpdate = async (id, name) => {
 
 //DELETE    //Eliminar
 export const fnDelete = async (id) => { 
+  console.log(id);
   await deleteDoc(doc(db, 'personas', id));
+  console.log("Elimino "+id);
 }
-
 
 //ALTA
 //addDoc(collection(db, 'items'), obj);         //obj = { name } Ejemplo
