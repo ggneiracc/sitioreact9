@@ -44,7 +44,7 @@ function App() {
 
   return (
     <div style={{width:"350px", background:"greenyellow", padding:"10px"}}>
-      <h1>App copia 2</h1>
+      <h1>sitiocopia2 (App.js)</h1>
       <AppForm {...{idActual, setIdActual, fnRead}} />
       {
         docsBD.map( (p) => 
