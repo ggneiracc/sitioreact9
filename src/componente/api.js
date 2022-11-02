@@ -1,5 +1,6 @@
+import { collection, getDocs, query, doc } from "firebase/firestore";
+import { addDoc, deleteDoc, updateDoc } from "firebase/firestore";
 import firebase, { db } from './firebase';
-import { collection, getDocs, query, doc,  addDoc, deleteDoc, updateDoc } from "firebase/firestore";
 //import { getDoc, setDoc, where } from "firebase/firestore";
 
 //CREAR     //Guardar
