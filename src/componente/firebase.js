@@ -33,3 +33,22 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore();
 export default app;
 */
+
+/*
+//////////////////////////////////////////////////////
+////////// es de fb-bdreact4 /////////////////////////
+//////////////////////////////////////////////////////
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+
+const firebaseConfig = {
+    apiKey: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    authDomain: 'yy-yyyyyyyyy-yyyyy.firebaseapp.com',
+    projectId: 'yy-yyyyyyyyy-yyyyy',
+    storageBucket: "yy-yyyyyyyyy-yyyyy.appspot.com",
+};
+
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore();
+export default app;
+*/
