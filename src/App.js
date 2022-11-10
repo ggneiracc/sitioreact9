@@ -32,7 +32,7 @@ function App() {
       //console.log(docsBD);                          //Error lectura debe ser afuera
     });
     //unsubscribe();                                  //Error No muesttra nada
-  }, [])
+  }, [idActual]);
 
 /*
   ////////// READ SIN onSnapshot - NO Actualiza en TIEMPPO REAL //////////
