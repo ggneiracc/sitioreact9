@@ -24,7 +24,7 @@ const AppForm = (props) => {
             if(validarForm()){                    //Validar
                 addDoc(collection(db, 'persona'), objeto);      //CREAR
                 console.log('Se guardó...');      //Msj
-                props.fnRead();                   //Actualizar LECTURA a BD
+                //props.fnRead();                   //Actualizar LECTURA a BD
             }else{
                 console.log('NO se guardó...');
             }
@@ -33,7 +33,7 @@ const AppForm = (props) => {
             //console.log(objeto);
             await updateDoc(doc(collection(db, "persona"), props.idActual), objeto);
             console.log("Se actualizó... ");
-            props.fnRead();                       //No actualiza
+            //props.fnRead();                       //No actualiza
             props.setIdActual('');                //Limpiar pedido
         }
         setObjeto(camposRegistro);                //limpiar objeto
@@ -57,7 +57,7 @@ const AppForm = (props) => {
         }else{
             obtenerDatosPorId(props.idActual);    //Obtiene REGISTRO de BD
         }
-        props.fnRead();                           //Actualiza ???
+        //props.fnRead();                           //Actualiza ???
 
     }, [props.idActual]);
 

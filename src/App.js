@@ -1,7 +1,7 @@
-import { collection, getDocs, query, doc, deleteDoc, where, } from "firebase/firestore";
+import { collection, getDocs, query, doc, deleteDoc, where, onSnapshot} from "firebase/firestore";
 //import { getDoc, addDoc, updateDoc, setDoc, increment } from "firebase/firestore";
 import React, { useEffect, useState } from 'react';
-import firebase, { db } from './componente/firebase';
+import { db } from './componente/firebase';
 import AppForm from './componente/AppForm';
 
 function App() {  
@@ -12,36 +12,51 @@ function App() {
   const [docsBD, setDocsBD] = useState([]);         //Para lectura a BD
   const [orden, setOrden] = useState(0);            //Para numero - falla
   const i = 1;                                      //Para numero - falla
+  //console.log(docsBD);                              //Lectura a variable
 
-  const fnRead = async () => {
-    //const tblPersona = query(collection(db, "persona"));   //Sin filtro
-    const tblPersona = query(collection(db, "persona"), where("nombre", "!=", ""));
-    const xDatosBD = await getDocs(tblPersona);
-    const xDoc = [];
-    xDatosBD.forEach((doc) => {
-      //console.log(doc.id, " => ", doc.data());
-      xDoc.push({id: doc.id, ...doc.data()});
+  ////////// READ con onSnapshot - Actualiza en TIEMPPO REAL /////////////
+  useEffect( () => {
+    //const xColeccionConQuery = query(collection(db, "persona"));   //Sin filtro
+    const xColeccionConQuery = query(collection(db, "persona"), where("nombre", "!=", ""));
+    const unsubscribe = onSnapshot(xColeccionConQuery, (xDatosBD) => {
+      const xDoc = [];
+      xDatosBD.forEach((doc) => {
+        //xDoc.push(doc.data().nombre);             //Datos como "texto" en array
+        //xDoc.push(doc.id);                        //Datos "ID" como "texto" en array
+        //xDoc.push(doc.data());                    //Datos como "Objeto"
+        //xDoc.push({id: doc.id});                  //Datos "ID" como "objeto" con indice "id"
+        xDoc.push({id: doc.id, ...doc.data()});     //Datos "union" de "objetos"
+      });
+      //console.log("Resultado...: ", xDoc.join(", "));
+      setDocsBD(xDoc);
+      //console.log(docsBD);                          //Error lectura debe ser afuera
     });
-    setDocsBD(xDoc);
-    //console.log(docsBD);
-  }
+    //unsubscribe();                                  //Error No muesttra nada
+  }, [])
+
 /*
+  ////////// READ SIN onSnapshot - NO Actualiza en TIEMPPO REAL //////////
   const fnRead = async () => {
-    //const tblPersona = query(collection(db, "persona"));   //Sin filtro
-    const tblPersona = query(collection(db, "persona"), where("nombre", "!=", ""));
-    const xDatosBD = await getDocs(tblPersona);
+    //const xColeccionConQuery = query(collection(db, "persona"));   //Sin filtro
+    const xColeccionConQuery = query(collection(db, "persona"), where("nombre", "!=", ""));
+    const xDatosBD = await getDocs(xColeccionConQuery);
     const xDoc = [];
     xDatosBD.forEach((doc) => {
-      //console.log(doc.id, " => ", doc.data());
-      xDoc.push({id: doc.id, ...doc.data()});
+      //xDoc.push(doc.data().nombre);             //Datos como "texto" en array
+      //xDoc.push(doc.id);                        //Datos "ID" como "texto" en array
+      //xDoc.push(doc.data());                    //Datos como "Objeto"
+      //xDoc.push({id: doc.id});                  //Datos "ID" como "objeto" con indice "id"
+      xDoc.push({id: doc.id, ...doc.data()});     //Datos "union" de "objetos"
     });
+    console.log("Resultado...: ", xDoc.join(", "));
     setDocsBD(xDoc);
-    //console.log(docsBD);
+    //console.log(docsBD);                        //Error lectura debe ser afuera
   } 
-*/
+
   useEffect( () => {
     fnRead(); 
   }, [idActual])
+*/
 
   ////////////////////////////////////////////////////////////////////////
   ////////// DELETE fnDelete - ELIMINAR //////////////////////////////////
@@ -52,13 +67,13 @@ function App() {
       await deleteDoc(doc(db, 'persona', xId));
       console.log("Se elimino... "+xId);
     }
-    fnRead();
+    //fnRead();
   }
 
   return (
     <div style={{width:"350px", background:"greenyellow", padding:"10px"}}>
       <h1>sitiocopia2 (App.js)</h1>
-      <AppForm {...{idActual, setIdActual, fnRead}} />
+      <AppForm {...{idActual, setIdActual}} />
       {
         docsBD.map( (p) => 
           <p key={p.id}>
