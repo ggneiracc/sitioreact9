@@ -24,8 +24,21 @@ function App() {
     });
     setDocsBD(xDoc);
     //console.log(docsBD);
+  }
+/*
+  const fnRead = async () => {
+    //const tblPersona = query(collection(db, "persona"));   //Sin filtro
+    const tblPersona = query(collection(db, "persona"), where("nombre", "!=", ""));
+    const xDatosBD = await getDocs(tblPersona);
+    const xDoc = [];
+    xDatosBD.forEach((doc) => {
+      //console.log(doc.id, " => ", doc.data());
+      xDoc.push({id: doc.id, ...doc.data()});
+    });
+    setDocsBD(xDoc);
+    //console.log(docsBD);
   } 
-  
+*/
   useEffect( () => {
     fnRead(); 
   }, [idActual])
