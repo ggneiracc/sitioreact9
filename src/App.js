@@ -10,9 +10,9 @@ function App() {
   ////////////////////////////////////////////////////////////////////////
   const [idActual, setIdActual] = useState("");     //Para CREAR y UPDATE
   const [docsBD, setDocsBD] = useState([]);         //Para lectura a BD
-  const [orden, setOrden] = useState(0);            //Para numero - falla
-  const i = 1;                                      //Para numero - falla
-  //console.log(docsBD);                              //Lectura a variable
+  const [orden, setOrden] = useState(0);            //Para número - falla
+  const i = 1;                                      //Para número - falla
+  //console.log(docsBD);  //Comentar sino genera bucle infinito useEffect
 
   ////////// READ con onSnapshot - Actualiza en TIEMPPO REAL /////////////
   useEffect( () => {
@@ -27,11 +27,11 @@ function App() {
         //xDoc.push({id: doc.id});                  //Datos "ID" como "objeto" con indice "id"
         xDoc.push({id: doc.id, ...doc.data()});     //Datos "union" de "objetos"
       });
-      //console.log("Resultado...: ", xDoc.join(", "));
+      //console.log("Resultado...: ", xDoc.join(", ")); //Comentar sino bucle infinito
       setDocsBD(xDoc);
       //console.log(docsBD);                          //Error lectura debe ser afuera
     });
-    //unsubscribe();                                  //Error No muesttra nada
+    //unsubscribe();         //Sólo si función estuviera fuera sino es error llamarlo
   }, [idActual]);
 
 /*
@@ -61,13 +61,14 @@ function App() {
   ////////////////////////////////////////////////////////////////////////
   ////////// DELETE fnDelete - ELIMINAR //////////////////////////////////
   ////////////////////////////////////////////////////////////////////////
+  
   const fnDelete = async (xId) => {
     //console.log(xId);
     if(window.confirm("Confirme para eliminar")){
       await deleteDoc(doc(db, 'persona', xId));
       console.log("Se elimino... "+xId);
     }
-    //fnRead();
+    //fnRead();   //No es necesario, fue cambiado por otra fn en useEffect
   }
 
   return (

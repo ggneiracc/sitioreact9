@@ -1,7 +1,7 @@
 import { collection, doc, getDoc, addDoc, updateDoc } from "firebase/firestore";
 //import { getDocs, query, setDoc, where, deleteDoc } from "firebase/firestore";
 import React, { useEffect, useState } from 'react';
-import firebase, { db } from './firebase';
+import { db } from './firebase';
 
 const AppForm = (props) => {
     ////////////////////////////////////////////////////////////////////////
@@ -16,27 +16,31 @@ const AppForm = (props) => {
         //console.log(objeto);                    //ver en TIEMPO REAL
     }
  
-    const handleSubmit = async (e) => {           //maneja submit (envio)
-        e.preventDefault();                       //evitar por defecto (false)
-        ////////// REGISTRAR ///////////////////////////////////////////////
-        if(props.idActual === ""){
-            //console.log(props.idActual);        //Verificar idActual
-            if(validarForm()){                    //Validar
-                addDoc(collection(db, 'persona'), objeto);      //CREAR
-                console.log('Se guardó...');      //Msj
-                //props.fnRead();                   //Actualizar LECTURA a BD
+    const handleSubmit = async (e) => {               //maneja submit (envio)
+        try {
+            e.preventDefault();                       //evitar por defecto (false)
+            ////////// REGISTRAR o ACTUALIZA ////////////////////////////////
+            if(props.idActual === ""){
+                //console.log(props.idActual);        //Verificar idActual
+                if(validarForm()){                    //Validar
+                    addDoc(collection(db, 'persona'), objeto);      //CREAR
+                    console.log('Se guardó...');      //Msj
+                    //props.fnRead();  //No es necesario se cambio fn en useEffect
+                }else{
+                    console.log('NO se guardó...');
+                }
             }else{
-                console.log('NO se guardó...');
+                ////////// ACTUALIZAR //////////////////////////////////////////
+                //console.log(objeto);
+                await updateDoc(doc(collection(db, "persona"), props.idActual), objeto);
+                console.log("Se actualizó... ");
+                //props.fnRead();           //No es necesario se cambio fn en useEffect
+                props.setIdActual('');                //Limpiar pedido
             }
-        }else{
-            ////////// ACTUALIZAR //////////////////////////////////////////
-            //console.log(objeto);
-            await updateDoc(doc(collection(db, "persona"), props.idActual), objeto);
-            console.log("Se actualizó... ");
-            //props.fnRead();                       //No actualiza
-            props.setIdActual('');                //Limpiar pedido
+            setObjeto(camposRegistro);                //limpiar objeto
+        } catch (error) {
+            console.log("Error en CREAR o UPDATE: ", error);
         }
-        setObjeto(camposRegistro);                //limpiar objeto
     }
     ////////// VALIDACIÓN //////////////////////////////////////////////////
     const validarForm = () => {
@@ -57,8 +61,6 @@ const AppForm = (props) => {
         }else{
             obtenerDatosPorId(props.idActual);    //Obtiene REGISTRO de BD
         }
-        //props.fnRead();                           //Actualiza ???
-
     }, [props.idActual]);
 
     const obtenerDatosPorId = async (xId) =>{
