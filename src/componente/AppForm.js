@@ -2,6 +2,8 @@ import { collection, doc, getDoc, addDoc, updateDoc } from "firebase/firestore";
 //import { getDocs, query, setDoc, where, deleteDoc } from "firebase/firestore";
 import React, { useEffect, useState } from 'react';
 import { db } from './firebase';
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const AppForm = (props) => {
     ////////////////////////////////////////////////////////////////////////
@@ -24,7 +26,11 @@ const AppForm = (props) => {
                 //console.log(props.idActual);        //Verificar idActual
                 if(validarForm()){                    //Validar
                     addDoc(collection(db, 'persona'), objeto);      //CREAR
-                    console.log('Se guardó...');      //Msj
+                    //console.log('Se guardó...');      //Msj
+                    toast("se GUARDO con exito...", {
+                        type:'success',
+                        autoClose: 2000
+                    })
                     //props.fnRead();  //No es necesario se cambio fn en useEffect
                 }else{
                     console.log('NO se guardó...');
@@ -33,7 +39,11 @@ const AppForm = (props) => {
                 ////////// ACTUALIZAR //////////////////////////////////////////
                 //console.log(objeto);
                 await updateDoc(doc(collection(db, "persona"), props.idActual), objeto);
-                console.log("Se actualizó... ");
+                //console.log("Se actualizó... ");
+                toast("se ACTUALIZO con exito...", {
+                    type:'info',
+                    autoClose: 2000
+                })
                 //props.fnRead();           //No es necesario se cambio fn en useEffect
                 props.setIdActual('');                //Limpiar pedido
             }
@@ -45,7 +55,11 @@ const AppForm = (props) => {
     ////////// VALIDACIÓN //////////////////////////////////////////////////
     const validarForm = () => {
         if(objeto.nombre==="" || /^\s+$/.test(objeto.nombre)){
-            alert("Escriba nombres...");
+            //alert("Escriba nombres...");
+            toast("Escriba nombre...", {
+                type:'warning',
+                autoClose: 2000
+            })
             return false;                         //Si no tiene texto
         }
         return true;                              //Si tiene texto

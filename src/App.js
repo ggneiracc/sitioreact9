@@ -3,6 +3,9 @@ import { collection, getDocs, query, doc, deleteDoc, where, onSnapshot} from "fi
 import React, { useEffect, useState } from 'react';
 import { db } from './componente/firebase';
 import AppForm from './componente/AppForm';
+import { toast } from 'react-toastify';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {  
   ////////////////////////////////////////////////////////////////////////
@@ -66,47 +69,57 @@ function App() {
     //console.log(xId);
     if(window.confirm("Confirme para eliminar")){
       await deleteDoc(doc(db, 'persona', xId));
-      console.log("Se elimino... "+xId);
+      toast("Documento elimnado con éxito", {
+        type:'error',
+        autoClose: 2000
+      })
+      //console.log("Se elimino... "+xId);
     }
     //fnRead();   //No es necesario, fue cambiado por otra fn en useEffect
   }
 
   return (
     <div className="container text-center">
-    <div className="card bs-secondary p-3 mt-3">
-      <div className="col-md-12 p-2">
-        <div className="card mb-1">
-          <h1>Sitiocopia2 (App.js)</h1>
+      <div className="card bs-secondary p-3 mt-3">
+
+        <ToastContainer />
+
+        <div className="col-md-12 p-2">
+          <div className="card mb-1">
+            <h1>Sitiocopia2 (App.js)</h1>
+          </div>
         </div>
-      </div>
-      <div className="col-md-12 p-2">
-        <AppForm {...{idActual, setIdActual}} />
-      </div>
-      <div className="col-md-12 p-2">
-        {
-          docsBD.map( (p) => 
-            <div className="card mb-1" key={p.id}>
-              <div className="card-body">
-                <div className="d-flex justify-content-between">
-                  <h4>N.{i} - {p.nombre} </h4>
-                  <div>
-                    <i className="material-icons text-danger"
-                      onClick={() => fnDelete(p.id)}>close</i>
-                      ...
-                    <i className="material-icons text-warning"
-                      onClick={() => setIdActual(p.id)}>create</i>
+
+        <div className="col-md-12 p-2">
+          <AppForm {...{idActual, setIdActual}} />
+        </div>
+        
+        <div className="col-md-12 p-2">
+          {
+            docsBD.map( (p) => 
+              <div className="card mb-1" key={p.id}>
+                <div className="card-body">
+                  <div className="d-flex justify-content-between">
+                    <h4>N.{i} - {p.nombre} </h4>
+                    <div>
+                      <i className="material-icons text-danger"
+                        onClick={() => fnDelete(p.id)}>close</i>
+                        ...
+                      <i className="material-icons text-warning"
+                        onClick={() => setIdActual(p.id)}>create</i>
+                    </div>
+                  </div>
+                  <div className="d-flex justify-content">
+                    <span>Edad: {p.edad} </span>...  
+                    <a href="#"> Genero: {p.genero}</a>
                   </div>
                 </div>
-                <div className="d-flex justify-content">
-                  <span>Edad: {p.edad} </span>...  
-                  <a href="#"> Genero: {p.genero}</a>
-                </div>
               </div>
-            </div>
-          ) 
-        }
+            ) 
+          }
+        </div>
+        
       </div>
-    </div>
     </div>
   );
 }
