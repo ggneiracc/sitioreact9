@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { db } from './componente/firebase';
 import AppForm from './componente/AppForm';
 
+
 function App() {  
   ////////////////////////////////////////////////////////////////////////
   ////////// READ - fnRead - LECTURA BD //////////////////////////////////
@@ -72,41 +73,33 @@ function App() {
   }
 
   return (
-    <div className="container text-center">
-    <div className="card bs-secondary p-3 mt-3">
-      <div className="col-md-12 p-2">
-        <div className="card mb-1">
-          <h1>Sitiocopia2 (App.js)</h1>
-        </div>
+    <div>
+      <div class="input-group">
+        <label class="input-group-text" for="inputGroupFile01">
+          <span className="material-icons">group_add</span>
+        </label>
+        <input type="text" class="form-control" id="inputGroupFile01" />
       </div>
-      <div className="col-md-12 p-2">
-        <AppForm {...{idActual, setIdActual}} />
+
+      <div class="input-group">
+        <label class="input-group-text" for="inputGroupFile01">
+          <span className="material-icons">star_half</span>
+        </label>
+        <input type="text" class="form-control" id="inputGroupFile01" />
       </div>
-      <div className="col-md-12 p-2">
-        {
-          docsBD.map( (p) => 
-            <div className="card mb-1" key={p.id}>
-              <div className="card-body">
-                <div className="d-flex justify-content-between">
-                  <h4>N.{i} - {p.nombre} </h4>
-                  <div>
-                    <i className="material-icons text-danger"
-                      onClick={() => fnDelete(p.id)}>close</i>
-                      ...
-                    <i className="material-icons text-warning"
-                      onClick={() => setIdActual(p.id)}>create</i>
-                  </div>
-                </div>
-                <div className="d-flex justify-content">
-                  <span>Edad: {p.edad} </span>...  
-                  <a href="#"> Genero: {p.genero}</a>
-                </div>
-              </div>
-            </div>
-          ) 
-        }
+
+      <div class="input-group">
+        <label class="input-group-text" for="inputGroupFile01">
+          <span className="material-icons">insert_link</span>
+        </label>
+        <input type="text" class="form-control" id="inputGroupFile01" />
       </div>
-    </div>
+
+      <div class="input-group">
+        <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
+          Button
+        </button>
+      </div>
     </div>
   );
 }

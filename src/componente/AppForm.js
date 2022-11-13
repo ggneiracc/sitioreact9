@@ -77,20 +77,33 @@ const AppForm = (props) => {
     //console.log(objeto);
 
     return (
-        <div style={{background:"orange", padding:"10px", textAlign:"center"}}>
-        <h1>AppForm.js</h1>
-        <form onSubmit={handleSubmit}>
-
-            <input type="text" name="nombre" placeholder="Nombres..."
-            onChange={handleStatusChange} value={objeto.nombre} /> <br/>
-
-            <input type="text" name="edad"   placeholder="Edad..."
-            onChange={handleStatusChange} value={objeto.edad} /> <br/>
-
-            <input type="text" name="genero" placeholder="Genero..."
-            onChange={handleStatusChange} value={objeto.genero} /> <br/>
-
-            <button> 
+        <div>
+        <form className="card card-body" onSubmit={handleSubmit}>
+            <button className="btn btn-primary btn-block"> 
+                Formulario (AppForm.js)
+            </button>
+            <div className="form-group input-group">
+                <div className="input-group-text bd-light">
+                    <i className="material-icons">group_add</i>
+                </div>
+                <input type="text" className="form-control" name="nombre" placeholder="Nombres..."
+                    onChange={handleStatusChange} value={objeto.nombre} />
+            </div>
+            <div className="form-group input-group clearfix">
+                <div className="input-group-text bd-light ">
+                    <i className="material-icons">star_half</i>
+                </div>
+                <input type="text" className="form-control float-start" name="edad" placeholder="Edad..."
+                    onChange={handleStatusChange} value={objeto.edad} />
+            </div>
+            <div className="form-group input-group">
+                <div className="input-group-text bd-light">
+                    <i className="material-icons">insert_link</i>
+                </div>
+                <input type="text" className="form-control" name="genero" placeholder="Género..."
+                    onChange={handleStatusChange} value={objeto.genero} />
+            </div>
+            <button className="btn btn-primary btn-block"> 
                 {props.idActual === ""? "Guardar" : "Actualizar"} 
             </button>
         </form>
