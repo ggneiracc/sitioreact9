@@ -1,16 +1,31 @@
-import { useState } from "react";
+import { collection, onSnapshot, where, query } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import AppForm from "./componente/AppForm";
+import {db} from "./componente/firebase";
 
 function App() {  
   ///////////////////////////////////////////////////////////////////////
   ////////// READ - fnRead - LECTURA A BD ///////////////////////////////
   ///////////////////////////////////////////////////////////////////////
   const [docsBD, setDocsBD] = useState([]);
+  console.log(docsBD);
 
   const fnRead = () => {
     console.log("Lectura a BD");
   }
 
+  useEffect( () => {
+    const xColeccionConQuery = query(collection(db, "persona"), where("nombre", "!=", ""));
+    const unsubcribe = onSnapshot(xColeccionConQuery, (xDatosBD) => {
+      const xDoc = [];
+      xDatosBD.forEach( (doc) => {
+        xDoc.push(doc.data().nombre);
+      });
+
+      setDocsBD(xDoc);
+    });
+  }, [idActual] );
+  
   ///////////////////////////////////////////////////////////////////////
   ////////// DELETE - fnDelete - Eliminar registros /////////////////////
   ///////////////////////////////////////////////////////////////////////
