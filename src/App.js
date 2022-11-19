@@ -34,7 +34,7 @@ function App() {
       console.error(error);
     }
   }
-
+  //fnRead();                    //Para pruebas sin useEffect
   useEffect( () => {
     fnRead();
   }, []);
