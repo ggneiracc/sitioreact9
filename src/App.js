@@ -1,16 +1,14 @@
-import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
+import { collection, onSnapshot, where, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import AppForm from "./componente/AppForm";
 import {db} from "./componente/firebase";
-
 
 function App() {  
   ///////////////////////////////////////////////////////////////////////
   ////////// READ - fnRead - LECTURA A BD ///////////////////////////////
   ///////////////////////////////////////////////////////////////////////
   const [docsBD, setDocsBD] = useState([]);
-  //console.log(docsBD);
-
+  
   const fnRead = () => {
     try {
       const xColeccionConQuery = query(collection(db, "persona"));
@@ -28,12 +26,14 @@ function App() {
       
     }
   }
+
   fnRead();
 /*
   useEffect( () => {
     fnRead();
   }, []);
 */
+
   ///////////////////////////////////////////////////////////////////////
   ////////// DELETE - fnDelete - Eliminar registros /////////////////////
   ///////////////////////////////////////////////////////////////////////
@@ -42,7 +42,6 @@ function App() {
   const fnDelete = () => {
     console.log("Se elimino...");
   };
-
 
   return (
     <div style={{width:"350px", background:"greenyellow", padding:"10px"}}>
