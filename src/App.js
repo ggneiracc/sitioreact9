@@ -1,4 +1,5 @@
-import { collection, onSnapshot, where, query } from "firebase/firestore";
+import { collection, onSnapshot, query, deleteDoc, doc } from "firebase/firestore";
+//import { addDoc, updateDoc, getDoc, setDoc, increment, getDocs, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import AppForm from "./componente/AppForm";
 import {db} from "./componente/firebase";
@@ -16,6 +17,7 @@ function App() {
       const unsubscribe = onSnapshot(xColeccionConQuery, (xDatosBD) => {
         const xDoc = [];
         xDatosBD.forEach( (doc) => {
+          
           xDoc.push({id: doc.id, ...doc.data()});
           //console.log({id: doc.id, ...doc.data()});
         });
@@ -23,24 +25,25 @@ function App() {
         //console.log(xDoc);
       });
     } catch (error) {
-      
+      console.error(error);
     }
   }
 
-  fnRead();
-/*
   useEffect( () => {
     fnRead();
   }, []);
-*/
+ 
 
   ///////////////////////////////////////////////////////////////////////
   ////////// DELETE - fnDelete - Eliminar registros /////////////////////
   ///////////////////////////////////////////////////////////////////////
   const [idActual, setIdActual] = useState("");
 
-  const fnDelete = () => {
-    console.log("Se elimino...");
+  const fnDelete = async (xId) => {
+    if(window.confirm("Esta seguro que desea eliminar...?")){
+      await deleteDoc(doc(db, "persona", xId));
+      console.log("Se elimino...");
+    }
   };
 
   return (
@@ -49,7 +52,14 @@ function App() {
       <h3>READ / DELETE</h3>
       <AppForm {...{idActual, setIdActual, fnRead}} />
       {
-        docsBD.map((p) => <p key={p.id}> {p.nombre} </p> )
+        docsBD.map((p) => 
+          <p key={p.id}> 
+            No. 1 {p.nombre} ....
+            <span onClick={() => fnDelete(p.id)}> x </span>
+            ...
+            <span onClick={() => setIdActual(p.id)}> A </span>
+          </p> 
+        )
       }      
     </div>
   );
