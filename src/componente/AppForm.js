@@ -1,5 +1,5 @@
-import { addDoc, collection, getDoc, getDocs, doc, updateDoc } from 'firebase/firestore';
-//import { setDoc, increment, where, onSnapshot, query, deleteDoc } from "firebase/firestore";
+import { collection, doc, getDoc, addDoc, updateDoc } from "firebase/firestore";
+//import { getDocs, query, setDoc, where, deleteDoc } from "firebase/firestore";
 import React, {useEffect, useState} from 'react'
 import {db} from "./firebase";
 
@@ -8,32 +8,36 @@ const AppForm = (props) => {
     ////////// CREAR - fnCrear - Guardar //////////////////////////////////
     ////////// UPDATE - fnUpdate - Actualizar /////////////////////////////
     ///////////////////////////////////////////////////////////////////////
-    const camposRegistro = {nombre:"", edad:"", genero:""};
-    const [objeto, setObjeto] = useState(camposRegistro);
+    const camposRegistro = {nombre:"", edad:"", genero:""}; //Estructura tbl
+    const [objeto, setObjeto] = useState(camposRegistro);   //tabla o objeto
 
-    const handleStatusChange = (e) => {      //Manejar cambios en form
-        const {name, value} = e.target;
-        setObjeto({...objeto, [name]:value });
-       //console.log(objeto);
+    const handleStatusChange = (e) => {           //Maneja cambios en input
+        const {name, value} = e.target;           //Capta lo que se escribe
+        setObjeto({...objeto, [name]:value });    //asigna al obj name y value
+       //console.log(objeto);                     //ver en TIEMPO REAL
     };
  
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (e) => {           //maneja submit (envio)
+        e.preventDefault();                       //evitar por defecto (false)
 
         try {
+            ////////// REGISTRAR o ACTUALIZA ////////////////////////////////
             if(props.idActual === ""){
-                if(validarForm()){
+                //console.log(props.idActual);        //Verificar idActual
+                if(validarForm()){                    //Validar
                     addDoc(collection(db, 'persona'), objeto);
+                    //console.log('Se guardó...');      //Msj
                     console.log("Se guardo registro en BD...");
                 }else{
                     console.log("NO se guardo...");
                 }
             }else{
+                ////////// ACTUALIZAR //////////////////////////////////////////
                 await updateDoc(doc(collection(db, "persona"), props.idActual), objeto);
                 console.log("Se actualizo con éxito...");
-                props.setIdActual("");
+                props.setIdActual("");                //Limpiar pedido
             }
-            setObjeto(camposRegistro);
+            setObjeto(camposRegistro);                //limpiar objeto
             
         } catch (error) {
             console.error();
@@ -53,21 +57,23 @@ const AppForm = (props) => {
     ////////// OBTENER registro por idActual //////////////////////////////
     ///////////////////////////////////////////////////////////////////////
     useEffect(() => {
-        if(props.idActual === ""){
+        if(props.idActual === ""){               //Si no hay q' id Update
             setObjeto(camposRegistro);
         }else{
-            obtenerDatosPorId(props.idActual);
+            obtenerDatosPorId(props.idActual);    //Obtiene REGISTRO de BD
         }
     }, [props.idActual]);
 
     const obtenerDatosPorId = async (xId) => {
-         const objPorId = doc(db, "persona", xId);
-         const docPorId = await getDoc(objPorId);
-         if(docPorId.exists()){
-            setObjeto(docPorId.data());
-         }else{
+        //console.log("xId ", xId);               //Id a actualizar    
+        const objPorId = doc(db, "persona", xId); //Obtiene por tabla
+        const docPorId = await getDoc(objPorId);  //fn para obtener
+        if(docPorId.exists()){
+            //console.log("Datos de doc... ", docPorId.data());
+            setObjeto(docPorId.data());          //Pasando datos a variable
+        }else{
             console.log("No hay datos...")
-         }
+        }
     };
 
     return (

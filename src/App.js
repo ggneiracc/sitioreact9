@@ -1,5 +1,5 @@
-import { collection, onSnapshot, query, deleteDoc, doc } from "firebase/firestore";
-//import { addDoc, updateDoc, getDoc, setDoc, increment, getDocs, where } from "firebase/firestore";
+import { collection, getDocs, query, doc, deleteDoc, where, onSnapshot} from "firebase/firestore";
+//import { getDoc, addDoc, updateDoc, setDoc, increment } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import AppForm from "./componente/AppForm";
 import {db} from "./componente/firebase";
@@ -8,7 +8,8 @@ function App() {
   ///////////////////////////////////////////////////////////////////////
   ////////// READ - fnRead - LECTURA A BD ///////////////////////////////
   ///////////////////////////////////////////////////////////////////////
-  const [docsBD, setDocsBD] = useState([]);
+  const [docsBD, setDocsBD] = useState([]);          //Para lectura a BD
+  //console.log(docsBD);  //Comentar sino genera bucle infinito useEffect
   
   const fnRead = () => {
     try {
@@ -17,13 +18,18 @@ function App() {
       const unsubscribe = onSnapshot(xColeccionConQuery, (xDatosBD) => {
         const xDoc = [];
         xDatosBD.forEach( (doc) => {
-          
+          //xDoc.push(doc.data().nombre);         //Datos como "texto" en array
+          //xDoc.push(doc.id);                    //Datos "ID" como "texto" en array
+          //xDoc.push(doc.data());                //Datos como "Objeto"
+          //xDoc.push({id: doc.id});              //Datos "ID" como "objeto" con indice "id"
           xDoc.push({id: doc.id, ...doc.data()});
           //console.log({id: doc.id, ...doc.data()});
         });
+        //console.log("Resultado...: ", xDoc.join(", ")); //Comentar sino bucle infinito
         setDocsBD(xDoc);
-        //console.log(xDoc);
+        //console.log(docsBD);                    //Error lectura debe ser afuera
       });
+
     } catch (error) {
       console.error(error);
     }
